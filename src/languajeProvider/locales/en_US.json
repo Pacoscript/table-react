@@ -1,0 +1,14 @@
+{
+  "service": "service",
+  "destination": "destination/agent",
+  "source": "contact number",
+  "date": "date",
+  "hour": "hour",
+  "duration": "duration(min)",
+  "disposition": "disposition",
+  "note": "note",
+  "typing": "typing",
+  "poll": "poll",
+  "hasrecord": "record",
+  "languageSelection": "select a language: "
+}

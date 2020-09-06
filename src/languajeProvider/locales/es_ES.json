@@ -1,0 +1,14 @@
+{
+  "service": "servicio",
+  "destination": "destino/agente",
+  "source": "numero de contacto",
+  "date": "fecha",
+  "hour": "hora",
+  "duration": "duración(min)",
+  "disposition": "estado",
+  "note": "texto",
+  "typing": "tipificación",
+  "poll": "encuesta",
+  "hasrecord": "grabación",
+  "languageSelection": "seleccione un lenguaje: "
+}
