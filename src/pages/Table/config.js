@@ -41,7 +41,7 @@ const tableConfig = {
             type: 'text'
         },
         {
-            name: 'service',
+            name: 'typing',
             key: 'typing',
             type: 'text'
         },
