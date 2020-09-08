@@ -114,7 +114,6 @@ const Table = (props) => {
 
   return (
     <>
-      <i className="fas fa-camera"></i>
       <label>{formatMessage('languageSelection', language)}</label>
       <select
         name="languajes"
