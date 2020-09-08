@@ -49,6 +49,14 @@ const Table = (props) => {
       setLastOrdination({ key: key, type: type, order: 'asc'})
       order = 'asc'
     }
+    ordination(type, key, order)
+      .then(response =>{
+        setTableRows(response)
+        console.log(response)
+      })
+  }
+
+  const ordination = async (type, key, order) => {
     const tableDataOrdered = dataSource.sort(function (a, b) {
       const aElement = type !== 'hour' ? a[key] : a[key].split(' ')[1]
       const bElement = type !== 'hour' ? b[key] : b[key].split(' ')[1]
@@ -73,7 +81,7 @@ const Table = (props) => {
         </tr>
       )
     })
-    setTableRows(rows)
+    return rows
   }
 
   const renderCell = (object, key, type) => {
@@ -93,9 +101,11 @@ const Table = (props) => {
         return (
           <th
             key={`header-${column.name}`}
-            onClick={() => handleOrderByColumn(column.key, column.type)}
+            
           >
+            <button type="button" onClick={() => handleOrderByColumn(column.key, column.type)}>
             {formatMessage(column.name, language)}
+            </button>
           </th>
         )
       })}
