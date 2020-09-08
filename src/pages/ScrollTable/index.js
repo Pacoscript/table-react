@@ -10,13 +10,25 @@ const ScrollTable = (props) => {
   const [nextItem, setNextItem] = useState(0)
   const [rowsToShow, setRowsToShow] = useState()
   const [tableRows, setTableRows] = useState([])
+  const [lastOrdination, setLastOrdination] = useState({
+    key: undefined,
+    type: undefined,
+    order: 'asc',
+  })
+  const [dataSourceOrdered, setDataSourceOrdered] = useState()
 
   const { languageChanged, language } = props
 
   useEffect(() => {
-    const firstRenderInfo = exerciseUiTable.slice(0, 19)
-    setRowsToShow(firstRenderInfo)
-  }, [])
+    if (dataSourceOrdered === undefined) {
+      const firstRenderInfo = exerciseUiTable.slice(0, 19)
+      setRowsToShow(firstRenderInfo)
+    } else {
+      const firstRenderInfo = dataSourceOrdered.slice(0, nextItem)
+      setRowsToShow(firstRenderInfo)
+      setTableRows([])
+    }
+  }, [dataSourceOrdered])
 
   useEffect(() => {
     if (rowsToShow !== undefined) {
@@ -67,13 +79,46 @@ const ScrollTable = (props) => {
     }
   }
 
+  const handleOrderByColumn = (key, type) => {
+    let order
+    if (lastOrdination.key === key && lastOrdination.type === type) {
+      setLastOrdination({
+        key: key,
+        type: type,
+        order: lastOrdination.order === 'asc' ? 'desc' : 'asc',
+      })
+      order = lastOrdination.order === 'asc' ? 'desc' : 'asc'
+    } else {
+      setLastOrdination({ key: key, type: type, order: 'asc' })
+      order = 'asc'
+    }
+    const orderedData = ordination(type, key, order)
+    setDataSourceOrdered([...orderedData])
+  }
+
+  const ordination = (type, key, order) => {
+    const tableDataOrdered = exerciseUiTable.sort(function (a, b) {
+      const aElement = type !== 'hour' ? a[key] : a[key].split(' ')[1]
+      const bElement = type !== 'hour' ? b[key] : b[key].split(' ')[1]
+      if (aElement > bElement) {
+        return order === 'asc' ? 1 : -1
+      }
+      if (aElement < bElement) {
+        return order === 'asc' ? -1 : 1
+      }
+      return 0
+    })
+    return tableDataOrdered
+  }
+
   const tableHeader = (
     <tr>
       {tableConfig.columns.map((column) => {
         return (
           <th key={`header-${column.name}`} className={`th-${column.name}`}>
             <button
-              type="button" /* onClick={() => handleOrderByColumn(column.key, column.type)} */
+              type="button"
+              onClick={() => handleOrderByColumn(column.key, column.type)}
             >
               {formatMessage(column.name, language)}
             </button>
@@ -84,7 +129,7 @@ const ScrollTable = (props) => {
   )
 
   return (
-    <table>
+    <>
       <label>{formatMessage('languageSelection', language)}</label>
       <select
         name="languajes"
@@ -96,10 +141,12 @@ const ScrollTable = (props) => {
         <option value={'english'}>English</option>
       </select>
       <div className="infinite-list" onScroll={handleScroll}>
-        {tableHeader}
-        {tableRows}
+        <table>
+          <thead>{tableHeader}</thead>
+          <tbody>{tableRows}</tbody>
+        </table>
       </div>
-    </table>
+    </>
   )
 }
 
