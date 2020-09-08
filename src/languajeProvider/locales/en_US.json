@@ -10,5 +10,6 @@
   "typing": "typing",
   "poll": "poll",
   "hasrecord": "record",
-  "languageSelection": "select a language: "
+  "languageSelection": "select a language: ",
+  "groupSelection": "group by: "
 }

@@ -16,6 +16,7 @@ const ScrollTable = (props) => {
     order: 'asc',
   })
   const [dataSourceOrdered, setDataSourceOrdered] = useState()
+  // const [groupBy, setGroupBy] = useState('')
 
   const { languageChanged, language } = props
 
@@ -24,7 +25,7 @@ const ScrollTable = (props) => {
       const firstRenderInfo = exerciseUiTable.slice(0, 19)
       setRowsToShow(firstRenderInfo)
     } else {
-      const firstRenderInfo = dataSourceOrdered.slice(0, nextItem)
+      const firstRenderInfo = dataSourceOrdered.slice(0, 19)
       setRowsToShow(firstRenderInfo)
       setTableRows([])
     }
@@ -96,6 +97,23 @@ const ScrollTable = (props) => {
     setDataSourceOrdered([...orderedData])
   }
 
+  const handleGroupChanged = (event) => {
+    // setGroupBy(event.target.value)
+    const groupBy = event.target.value
+    const order = 'asc'
+    const type = tableConfig.columns.filter(column => column.name === groupBy).type
+    const orderedData = ordination(type, groupBy, order)
+    const alreadygrouped = []
+    let groupedData = []
+    orderedData.forEach(row => {
+      if(!alreadygrouped.some(alreadyGroupedBy => alreadyGroupedBy === row[groupBy])){
+        alreadygrouped.push(row[groupBy])
+        const filtered = orderedData.filter(element => element[groupBy] === row[groupBy])
+        groupedData = [...groupedData, {groupName: row[groupBy], numberOfElements: filtered.length, rows: [...filtered]}]
+      }
+    })
+  }
+
   const ordination = (type, key, order) => {
     const tableDataOrdered = exerciseUiTable.sort(function (a, b) {
       const aElement = type !== 'hour' ? a[key] : a[key].split(' ')[1]
@@ -128,18 +146,38 @@ const ScrollTable = (props) => {
     </tr>
   )
 
+  const groupSelection = (
+    <>
+      <label>{formatMessage('groupSelection', language)}</label>
+      <select name="groups" id="groups" onChange={handleGroupChanged}>
+        <option value={'nogroup'}>select a group...</option>
+        {tableConfig.columns.map((column) => {
+          return (
+            <option value={column.name} key={`groupOption-${column.name}`}>
+              {formatMessage(column.name, language)}
+            </option>
+          )
+        })}
+      </select>
+    </>
+  )
+
   return (
     <>
-      <label>{formatMessage('languageSelection', language)}</label>
-      <select
-        name="languajes"
-        id="languajes"
-        onChange={handleLanguageChanged}
-        defaultValue={'spanish'}
-      >
-        <option value={'spanish'}>Spanish</option>
-        <option value={'english'}>English</option>
-      </select>
+      <div>
+        <label>{formatMessage('languageSelection', language)}</label>
+        <select
+          name="languages"
+          id="languages"
+          onChange={handleLanguageChanged}
+          defaultValue={'spanish'}
+        >
+          <option value={'spanish'}>Spanish</option>
+          <option value={'english'}>English</option>
+        </select>
+      </div>
+      <div>{groupSelection}</div>
+
       <div className="infinite-list" onScroll={handleScroll}>
         <table>
           <thead>{tableHeader}</thead>

@@ -10,5 +10,6 @@
   "typing": "tipificación",
   "poll": "encuesta",
   "hasrecord": "grabación",
-  "languageSelection": "seleccione un lenguaje: "
+  "languageSelection": "seleccione un lenguaje: ",
+  "groupSelection": "agrupar por: "
 }
