@@ -16,23 +16,28 @@ const ScrollTable = (props) => {
     order: 'asc',
   })
   const [dataSourceOrdered, setDataSourceOrdered] = useState()
-  // const [groupBy, setGroupBy] = useState('')
+  const [dataSourceGrouped, setDataSourceGrouped] = useState()
 
   const { languageChanged, language } = props
 
   useEffect(() => {
-    if (dataSourceOrdered === undefined) {
-      const firstRenderInfo = exerciseUiTable.slice(0, 19)
-      setRowsToShow(firstRenderInfo)
-    } else {
+    if (dataSourceOrdered !== undefined) {
       const firstRenderInfo = dataSourceOrdered.slice(0, 19)
       setRowsToShow(firstRenderInfo)
       setTableRows([])
     }
-  }, [dataSourceOrdered])
+    if (dataSourceGrouped !== undefined) {
+      const firstRederInfo = dataSourceGrouped.slice(0,19)
+      setRowsToShow(firstRederInfo)
+      setTableRows([])
+    } else {
+      const firstRenderInfo = exerciseUiTable.slice(0, 19)
+      setRowsToShow(firstRenderInfo)
+    }
+  }, [dataSourceOrdered, dataSourceGrouped])
 
   useEffect(() => {
-    if (rowsToShow !== undefined) {
+    if (rowsToShow !== undefined && rowsToShow[0].groupName === undefined) {
       const newTableRows = rowsToShow.map((rowElement, index) => {
         return (
           <tr key={`tr-${index + nextItem}`}>
@@ -43,6 +48,18 @@ const ScrollTable = (props) => {
                 </td>
               )
             })}
+          </tr>
+        )
+      })
+      setTableRows([...tableRows, newTableRows])
+      setNextItem(nextItem + 20)
+    } else if(rowsToShow !== undefined){
+      const newTableRows = rowsToShow.map((rowElement, index) => {
+        return (
+          <tr key={`tr-grouped-${index + nextItem}`}>
+            <td>{rowElement.groupName}</td>
+            <td>{'nº: '+rowElement.numberOfElements}</td>
+            <td><button>+</button></td>
           </tr>
         )
       })
@@ -98,7 +115,6 @@ const ScrollTable = (props) => {
   }
 
   const handleGroupChanged = (event) => {
-    // setGroupBy(event.target.value)
     const groupBy = event.target.value
     const order = 'asc'
     const type = tableConfig.columns.filter(column => column.name === groupBy).type
@@ -112,6 +128,9 @@ const ScrollTable = (props) => {
         groupedData = [...groupedData, {groupName: row[groupBy], numberOfElements: filtered.length, rows: [...filtered]}]
       }
     })
+    console.log(groupedData)
+    setDataSourceOrdered()
+    setDataSourceGrouped([...groupedData])
   }
 
   const ordination = (type, key, order) => {
