@@ -181,7 +181,7 @@ const ScrollTable = (props) => {
           </tr>
         )
       })
-      const dataSource = [...dataSourceGrouped].slice(0, nextItem)
+      const dataSource = [...dataSourceGrouped].slice(0, 19)
       dataSource.splice(indexOfGroupedBy + 1, 0, ...newTableRows)
       setRowsToShow([...dataSource])
       setShowGroupedElementsClicked(true)
