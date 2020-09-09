@@ -11,7 +11,7 @@ function App() {
 
   return (
     <div className="App">
-      <ScrollTable language={language} languageChanged={languageChanged}/>
+      <ScrollTable language={language} languageChanged={languageChanged} />
     </div>
   )
 }

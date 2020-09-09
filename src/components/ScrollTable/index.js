@@ -4,7 +4,9 @@ import exerciseUiTable from '../../assets/exerciceUITable.json'
 import tableConfig from './config'
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
 import { faFileVideo } from '@fortawesome/free-solid-svg-icons'
-import { formatMessage } from '../../languajeProvider'
+import { formatMessage } from '../../languageProvider'
+import Controls from './components/controls'
+import TableHeader from './components/tableHeader'
 
 const ScrollTable = (props) => {
   const [nextItem, setNextItem] = useState(0)
@@ -222,60 +224,23 @@ const ScrollTable = (props) => {
     }
   }
 
-  const tableHeader = (
-    <tr>
-      {tableConfig.columns.map((column) => {
-        return (
-          <th
-            key={`header-${column.name}`}
-            className={`th-${column.name}`}
-            onClick={() => handleOrderByColumn(column.key, column.type)}
-          >
-            <label>{formatMessage(column.name, language)}</label>
-          </th>
-        )
-      })}
-    </tr>
-  )
-
-  const groupSelection = (
-    <>
-      <label>{formatMessage('groupSelection', language)}</label>
-      <select name="groups" id="groups" onChange={handleGroupChanged}>
-        <option value={'nogroup'}>select a group...</option>
-        {tableConfig.columns.map((column) => {
-          debugger
-          if (column.name !== 'hour' && column.name !== 'date') {
-            return (
-              <option value={column.name} key={`groupOption-${column.name}`}>
-                {formatMessage(column.name, language)}
-              </option>
-            )
-          }
-        })}
-      </select>
-    </>
-  )
-
   return (
     <>
-      <div>
-        <label>{formatMessage('languageSelection', language)}</label>
-        <select
-          name="languages"
-          id="languages"
-          onChange={handleLanguageChanged}
-          defaultValue={'spanish'}
-        >
-          <option value={'spanish'}>Spanish</option>
-          <option value={'english'}>English</option>
-        </select>
-      </div>
-      <div>{groupSelection}</div>
-
+      <Controls
+        language={language}
+        handleLanguageChanged={handleLanguageChanged}
+        formatMessage={formatMessage}
+        handleGroupChanged={handleGroupChanged}
+        tableConfig={tableConfig}
+      />
       <div className="infinite-list" onScroll={handleScroll}>
         <table>
-          <thead>{tableHeader}</thead>
+          <TableHeader
+            tableConfig={tableConfig}
+            handleOrderByColumn={handleOrderByColumn}
+            formatMessage={formatMessage}
+            language={language}
+          />
           <tbody>{tableRows}</tbody>
         </table>
       </div>

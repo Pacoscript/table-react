@@ -10,10 +10,23 @@ th {
 
 th {
   background-color: lightgrey;
+  text-transform: capitalize;
 }
 
-th:hover, label:hover {
+th:hover,
+label:hover {
   cursor: pointer;
+}
+
+.controls {
+  display: flex;
+  justify-content: space-between;
+  text-transform: uppercase;
+}
+
+.controls-languaje,
+.controls-group {
+  padding: 10px;
 }
 
 .infinite-list {
@@ -25,6 +38,8 @@ th:hover, label:hover {
   border-bottom: 1px solid black;
 }
 
-.th-service ,.th-source,.th-date {
+.th-service,
+.th-source,
+.th-date {
   width: 140px;
 }
