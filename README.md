@@ -1,68 +1,24 @@
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
+## Para arrancar el programa
 
-In the project directory, you can run:
+* clonar repositorio
+* entrar en la carpeta table-react
+* yarn install para instalar dependencias
+* yarn start para arrancar el proyecto
 
-### `yarn start`
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+### Funcionalidad tabla
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+* La tabla muestra una serie de filas correspondientes a un archivo JSON que el componente recibe como fuente de datos
+* Está pensada para que funcione con json de gran tamaño. No renderiza todos los elementos, sólo los veinte primeros y si hacemos scroll hasta la parte baja de la barra renderiza otros 20 añadiéndolos a los existentes
+* Se puede elegir el lenguaje, se ha hecho un proveedor de traducciones básico que sirva para toda la APP. Si fuera una SPA con varias páginas usará los mismos recursos para hacer las traducciones en todas las páginas. Por eso la funcionalidad del mismo se encuentra en App.js.
+* En el caso de la grabación muestra un icono en lugar de un texto dependiendo de si su valor es true o false
+* La tabla se puede ordenar por cualquier columna pulsando sobre el header de la columna. Si se vuelve a pulsar ordena en sentido inverso
+* Se pueden agrupar los elementos por árbol de primer nivel. La tabla aparece ordenada y se puede ver los elementos pulsando en el icono "+" si se quieren replegar volveríamos  a pulsar.
 
-### `yarn test`
-
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `yarn build`
-
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `yarn eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `yarn build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+### Arreglos pendientes
+* Cabeceras: debería quedarse fijada cuando hacemos scroll, habría que configurar las propiedades position correctamente.
+* Añadir icono junto a cartel cabecera cuando ordenamos para saber por qué elemento estamos ordenando y en qué sentido
+* Mostrar agrupados no funciona correctamente cuando hemos hecho scroll posiblemente hay algún problema de base, pendiente debuggar y arreglarlo
+* Hacer que la tabla sea más responsive de lo que es actualmente, por ejemplo haciendo que las celdas que tienen mucha información no la dibujen completa y al poner el ratón sobre la celda muestre un tooltip con toda la información. por ejemplo para la celda "Texto". Media Querys.
