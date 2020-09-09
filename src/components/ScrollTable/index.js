@@ -17,8 +17,12 @@ const ScrollTable = (props) => {
   })
   const [dataSourceOrdered, setDataSourceOrdered] = useState()
   const [dataSourceGrouped, setDataSourceGrouped] = useState()
-  const [showGroupedElementsClicked, setShowGroupedElementsClicked] = useState(false)
-  const [hideGroupedElementsClicked, setHideGroupedElementsClicked] = useState(false)
+  const [showGroupedElementsClicked, setShowGroupedElementsClicked] = useState(
+    false
+  )
+  const [hideGroupedElementsClicked, setHideGroupedElementsClicked] = useState(
+    false
+  )
 
   const { languageChanged, language } = props
 
@@ -29,7 +33,7 @@ const ScrollTable = (props) => {
       setTableRows([])
     }
     if (dataSourceGrouped !== undefined) {
-      const firstRederInfo = dataSourceGrouped.slice(0,19)
+      const firstRederInfo = dataSourceGrouped.slice(0, 19)
       setRowsToShow(firstRederInfo)
       setTableRows([])
     } else {
@@ -55,24 +59,28 @@ const ScrollTable = (props) => {
       })
       setTableRows([...tableRows, newTableRows])
       setNextItem(nextItem + 20)
-    } else if(rowsToShow !== undefined){
+    } else if (rowsToShow !== undefined) {
       const newTableRows = rowsToShow.map((rowElement, index) => {
-        if(rowElement.groupName !== undefined){
+        if (rowElement.groupName !== undefined) {
           return (
             <tr key={`tr-grouped-${index + nextItem}`}>
               <td>{rowElement.groupName}</td>
-              <td>{'quantity: '+rowElement.numberOfElements}</td>
-              <td><button onClick={() => showGroupedRows(rowElement.groupName)}>+</button></td>
+              <td>{'quantity: ' + rowElement.numberOfElements}</td>
+              <td>
+                <button onClick={() => showGroupedRows(rowElement.groupName)}>
+                  +
+                </button>
+              </td>
             </tr>
           )
         } else {
           return rowElement
         }
       })
-      if(showGroupedElementsClicked){
+      if (showGroupedElementsClicked) {
         setTableRows([newTableRows])
         setShowGroupedElementsClicked(false)
-      } else if(hideGroupedElementsClicked){
+      } else if (hideGroupedElementsClicked) {
         setTableRows([newTableRows])
         setHideGroupedElementsClicked(false)
       } else {
@@ -83,7 +91,7 @@ const ScrollTable = (props) => {
   }, [rowsToShow])
 
   const handleMoreRowsToShow = () => {
-    if(!dataSourceGrouped){
+    if (!dataSourceGrouped) {
       const moreRowsToShow = exerciseUiTable.slice(nextItem, nextItem + 20)
       setRowsToShow(moreRowsToShow)
     } else {
@@ -116,6 +124,7 @@ const ScrollTable = (props) => {
   }
 
   const handleOrderByColumn = (key, type) => {
+    setNextItem(0)
     let order
     if (lastOrdination.key === key && lastOrdination.type === type) {
       setLastOrdination({
@@ -135,15 +144,29 @@ const ScrollTable = (props) => {
   const handleGroupChanged = (event) => {
     const groupBy = event.target.value
     const order = 'asc'
-    const type = tableConfig.columns.filter(column => column.name === groupBy).type
+    const type = tableConfig.columns.filter((column) => column.name === groupBy)
+      .type
     const orderedData = ordination(type, groupBy, order)
     const alreadygrouped = []
     let groupedData = []
-    orderedData.forEach(row => {
-      if(!alreadygrouped.some(alreadyGroupedBy => alreadyGroupedBy === row[groupBy])){
+    orderedData.forEach((row) => {
+      if (
+        !alreadygrouped.some(
+          (alreadyGroupedBy) => alreadyGroupedBy === row[groupBy]
+        )
+      ) {
         alreadygrouped.push(row[groupBy])
-        const filtered = orderedData.filter(element => element[groupBy] === row[groupBy])
-        groupedData = [...groupedData, {groupName: row[groupBy], numberOfElements: filtered.length, rows: [...filtered]}]
+        const filtered = orderedData.filter(
+          (element) => element[groupBy] === row[groupBy]
+        )
+        groupedData = [
+          ...groupedData,
+          {
+            groupName: row[groupBy],
+            numberOfElements: filtered.length,
+            rows: [...filtered],
+          },
+        ]
       }
     })
     setDataSourceOrdered()
@@ -166,47 +189,49 @@ const ScrollTable = (props) => {
   }
 
   const showGroupedRows = (groupedBy) => {
-    const indexOfGroupedBy = dataSourceGrouped.findIndex(element => element.groupName === groupedBy)
-    if(!rowsToShow[indexOfGroupedBy +1].props){
-      const newTableRows = dataSourceGrouped[indexOfGroupedBy].rows.map((rowElement, index) => {
-        return (
-          <tr key={`tr-groupItem-${groupedBy}-${index}`}>
-            {tableConfig.columns.map((column, subindex) => {
-              return (
-                <td key={`tr-rowElement-${groupedBy}-${column.key}-${subindex}`}>
-                  {renderCell(rowElement, column.key, column.type)}
-                </td>
-              )
-            })}
-          </tr>
-        )
-      })
+    const indexOfGroupedBy = dataSourceGrouped.findIndex(
+      (element) => element.groupName === groupedBy
+    )
+    if (!rowsToShow[indexOfGroupedBy + 1].props) {
+      const newTableRows = dataSourceGrouped[indexOfGroupedBy].rows.map(
+        (rowElement, index) => {
+          return (
+            <tr key={`tr-groupItem-${groupedBy}-${index}`}>
+              {tableConfig.columns.map((column, subindex) => {
+                return (
+                  <td
+                    key={`tr-rowElement-${groupedBy}-${column.key}-${subindex}`}
+                  >
+                    {renderCell(rowElement, column.key, column.type)}
+                  </td>
+                )
+              })}
+            </tr>
+          )
+        }
+      )
       const dataSource = [...dataSourceGrouped].slice(0, 19)
       dataSource.splice(indexOfGroupedBy + 1, 0, ...newTableRows)
       setRowsToShow([...dataSource])
       setShowGroupedElementsClicked(true)
-      } else {
+    } else {
       const newTableRows = []
       const dataSource = [...dataSourceGrouped].slice(0, 19)
       setRowsToShow([...dataSource])
       setHideGroupedElementsClicked(true)
     }
-
-    
-    
   }
 
   const tableHeader = (
     <tr>
       {tableConfig.columns.map((column) => {
         return (
-          <th key={`header-${column.name}`} className={`th-${column.name}`}>
-            <button
-              type="button"
-              onClick={() => handleOrderByColumn(column.key, column.type)}
-            >
-              {formatMessage(column.name, language)}
-            </button>
+          <th
+            key={`header-${column.name}`}
+            className={`th-${column.name}`}
+            onClick={() => handleOrderByColumn(column.key, column.type)}
+          >
+            <label>{formatMessage(column.name, language)}</label>
           </th>
         )
       })}
@@ -219,11 +244,14 @@ const ScrollTable = (props) => {
       <select name="groups" id="groups" onChange={handleGroupChanged}>
         <option value={'nogroup'}>select a group...</option>
         {tableConfig.columns.map((column) => {
-          return (
-            <option value={column.name} key={`groupOption-${column.name}`}>
-              {formatMessage(column.name, language)}
-            </option>
-          )
+          debugger
+          if (column.name !== 'hour' && column.name !== 'date') {
+            return (
+              <option value={column.name} key={`groupOption-${column.name}`}>
+                {formatMessage(column.name, language)}
+              </option>
+            )
+          }
         })}
       </select>
     </>

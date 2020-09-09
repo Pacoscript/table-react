@@ -1,7 +1,6 @@
 import React, { useState } from 'react'
 import './App.css'
-// import Table from './pages/Table'
-import ScrollTable from './pages/ScrollTable'
+import ScrollTable from './components/ScrollTable'
 
 function App() {
   const [language, setLanguage] = useState('spanish')
@@ -12,7 +11,6 @@ function App() {
 
   return (
     <div className="App">
-      {/* <Table language={language} languageChanged={languageChanged} /> */}
       <ScrollTable language={language} languageChanged={languageChanged}/>
     </div>
   )
