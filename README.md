@@ -15,10 +15,10 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 * Se puede elegir el lenguaje, se ha hecho un proveedor de traducciones básico que sirva para toda la APP. Si fuera una SPA con varias páginas usará los mismos recursos para hacer las traducciones en todas las páginas. Por eso la funcionalidad del mismo se encuentra en App.js.
 * En el caso de la grabación muestra un icono en lugar de un texto dependiendo de si su valor es true o false
 * La tabla se puede ordenar por cualquier columna pulsando sobre el header de la columna. Si se vuelve a pulsar ordena en sentido inverso
-* Se pueden agrupar los elementos por árbol de primer nivel. La tabla aparece ordenada y se puede ver los elementos pulsando en el icono "+" si se quieren replegar volveríamos  a pulsar.
+* Se pueden agrupar los elementos por árbol de primer nivel. La tabla aparece ordenada y se puede ver los elementos pulsando en el icono "+" si se quieren replegar volveríamos  a pulsar "+".
 
 ### Arreglos pendientes
 * Cabeceras: debería quedarse fijada cuando hacemos scroll, habría que configurar las propiedades position correctamente.
-* Añadir icono junto a cartel cabecera cuando ordenamos para saber por qué elemento estamos ordenando y en qué sentido
-* Mostrar agrupados no funciona correctamente cuando hemos hecho scroll posiblemente hay algún problema de base, pendiente debuggar y arreglarlo
+* Botones e iconos dinámicos que cambien cuando ordenamos columnas o agrupamos o desagrupamos.
+* Mostrar agrupados no funciona correctamente. Es inestable por algún error de base que queda pendiente de depurar.
 * Hacer que la tabla sea más responsive de lo que es actualmente, por ejemplo haciendo que las celdas que tienen mucha información no la dibujen completa y al poner el ratón sobre la celda muestre un tooltip con toda la información. por ejemplo para la celda "Texto". Media Querys.
