@@ -25,6 +25,7 @@ const ScrollTable = (props) => {
   const [hideGroupedElementsClicked, setHideGroupedElementsClicked] = useState(
     false
   )
+  const [scrollBlocked, setScrollBlocked] = useState(false)
 
   const { languageChanged, language } = props
 
@@ -82,9 +83,11 @@ const ScrollTable = (props) => {
       if (showGroupedElementsClicked) {
         setTableRows([newTableRows])
         setShowGroupedElementsClicked(false)
+        setScrollBlocked(false)
       } else if (hideGroupedElementsClicked) {
         setTableRows([newTableRows])
         setHideGroupedElementsClicked(false)
+        setNextItem(0)
       } else {
         setTableRows([...tableRows, newTableRows])
         setNextItem(nextItem + 20)
@@ -104,7 +107,7 @@ const ScrollTable = (props) => {
 
   const handleScroll = (e) => {
     let element = e.target
-    if (element.scrollTop + element.clientHeight >= element.scrollHeight) {
+    if (element.scrollTop + element.clientHeight >= element.scrollHeight && !scrollBlocked) {
       handleMoreRowsToShow()
     }
   }
@@ -173,6 +176,7 @@ const ScrollTable = (props) => {
     })
     setDataSourceOrdered()
     setDataSourceGrouped([...groupedData])
+    setNextItem(0)
   }
 
   const ordination = (type, key, order) => {
@@ -191,11 +195,11 @@ const ScrollTable = (props) => {
   }
 
   const showGroupedRows = (groupedBy) => {
-    const indexOfGroupedBy = dataSourceGrouped.findIndex(
+    const indexOfGroupedBy = rowsToShow.findIndex(
       (element) => element.groupName === groupedBy
     )
     if (!rowsToShow[indexOfGroupedBy + 1].props) {
-      const newTableRows = dataSourceGrouped[indexOfGroupedBy].rows.map(
+      const newTableRows = rowsToShow[indexOfGroupedBy].rows.map(
         (rowElement, index) => {
           return (
             <tr key={`tr-groupItem-${groupedBy}-${index}`}>
@@ -212,12 +216,12 @@ const ScrollTable = (props) => {
           )
         }
       )
-      const dataSource = [...dataSourceGrouped].slice(0, 19)
-      dataSource.splice(indexOfGroupedBy + 1, 0, ...newTableRows)
+      const dataSource = [...dataSourceGrouped].slice(0, nextItem + 20)
+      dataSource.splice(indexOfGroupedBy + nextItem + 1, 0, ...newTableRows)
+      setScrollBlocked(true)
       setRowsToShow([...dataSource])
       setShowGroupedElementsClicked(true)
     } else {
-      const newTableRows = []
       const dataSource = [...dataSourceGrouped].slice(0, 19)
       setRowsToShow([...dataSource])
       setHideGroupedElementsClicked(true)
